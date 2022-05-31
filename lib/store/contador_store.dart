@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
 
-import 'contador_store.g.dart';
+part 'contador_store.g.dart';
 
 class ContadorStore = _ContadorStore with _$ContadorStore;
 
