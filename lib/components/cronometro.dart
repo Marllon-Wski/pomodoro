@@ -1,63 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pomodoro/components/botao_controle.dart';
+
+import '../store/pomodoro_store.dart';
 
 class Cronometro extends StatelessWidget {
   const Cronometro({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Hora de Trabalhar',
-            style: TextStyle(
-              fontSize: 30,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(height: 20),
-          Text(
-            '25:00',
-            style: TextStyle(
-              fontSize: 90,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(height: 20),
-          Row(
+    final store = GetIt.I.get<PomodotoStore>();
+
+    return Observer(
+      builder: (_) {
+        return Container(
+          color: store.estaTrabalhando() ? Colors.red : Colors.green,
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Iniciar
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: BotaoControle(
-                  texto: 'Iniciar',
-                  icone: Icons.play_arrow,
+              Text(
+                store.estaTrabalhando()
+                    ? 'Hora de Trabalhar'
+                    : 'Hora de Descansar',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
                 ),
               ),
-              // // Parar
-              // Padding(
-              // padding: const EdgeInsets.only(right: 8.0),
-              //   child: BotaoControle(
-              //     texto: 'Parar',
-              //     icone: Icons.stop,
-              //   ),
-              // ),
-              // Reiniciar
-              Padding(
-                padding: const EdgeInsets.only(left: 18.0),
-                child: BotaoControle(
-                  texto: 'Reiniciar',
-                  icone: Icons.refresh,
+              SizedBox(height: 20),
+              Text(
+                '${store.minutos.toString().padLeft(2, '0')}:${store.segundos.toString().padLeft(2, '0')}',
+                style: TextStyle(
+                  fontSize: 90,
+                  color: Colors.white,
                 ),
               ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Iniciar
+                  if (!store.iniciado)
+                    Padding(
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: BotaoControle(
+                        texto: 'Iniciar',
+                        icone: Icons.play_arrow,
+                        click: store.iniciar,
+                      ),
+                    ),
+
+                  // Parar
+                  if (store.iniciado)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: BotaoControle(
+                        texto: 'Parar',
+                        icone: Icons.stop,
+                        click: store.parar,
+                      ),
+                    ),
+
+                  // Reiniciar
+                  Padding(
+                    padding: EdgeInsets.only(left: 18.0),
+                    child: BotaoControle(
+                      texto: 'Reiniciar',
+                      icone: Icons.refresh,
+                      click: store.reiniciar,
+                    ),
+                  ),
+                ],
+              )
             ],
-          )
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 }

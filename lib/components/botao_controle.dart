@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BotaoControle extends StatelessWidget {
+  final void Function()? click;
+
   final String texto;
   final IconData icone;
   // final onPressed;
@@ -8,6 +10,7 @@ class BotaoControle extends StatelessWidget {
     Key? key,
     required this.texto,
     required this.icone,
+    this.click,
   }) : super(key: key);
 
   @override
@@ -20,7 +23,7 @@ class BotaoControle extends StatelessWidget {
             horizontal: 15,
           ),
           textStyle: TextStyle(fontSize: 20.0)),
-      onPressed: () {},
+      onPressed: click,
       child: Row(
         children: [
           Icon(

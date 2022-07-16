@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:pomodoro/store/pomodoro_store.dart';
 
 class EntradaTempo extends StatelessWidget {
   final String titulo;
   final int valor;
 
+  final void Function()? inc;
+  final void Function()? dec;
+
   const EntradaTempo({
     Key? key,
     required this.titulo,
     required this.valor,
+    required this.inc,
+    required this.dec,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final store = GetIt.I.get<PomodotoStore>();
+
     return Column(
       children: [
         Text(
@@ -21,9 +30,10 @@ class EntradaTempo extends StatelessWidget {
         Row(
           children: [
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: dec,
               mini: true,
-              backgroundColor: Colors.red,
+              backgroundColor:
+                  store.estaTrabalhando() ? Colors.red : Colors.green,
               child: Icon(Icons.arrow_downward),
             ),
             Padding(
@@ -31,9 +41,10 @@ class EntradaTempo extends StatelessWidget {
               child: Text('${this.valor} min'),
             ),
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: inc,
               mini: true,
-              backgroundColor: Colors.red,
+              backgroundColor:
+                  store.estaTrabalhando() ? Colors.red : Colors.green,
               child: Icon(Icons.arrow_upward),
             ),
           ],
