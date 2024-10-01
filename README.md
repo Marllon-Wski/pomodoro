@@ -1,6 +1,6 @@
 # pomodoro
 
-Um progeto de Flutter.
+Um projeto de Flutter.
 
 ## App Pomodoro.
 
